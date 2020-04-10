@@ -1,1 +1,8 @@
-node_modules
+node_modules/
+dist/*.js
+dist/images/
+*/npm-debug.log*
+*/access.log
+.DS_Store
+*/.DS_Store
+index.html

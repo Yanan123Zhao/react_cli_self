@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run debug --",
-    "debug": "cross-env NODE_ENV=develepment webpack-dev-server --config ./wp.cfg/webpack.config.debug.babel.js --host 0.0.0.0 --port 8009 --inline --progress --colors",
+    "debug": "cross-env NODE_ENV=develepment webpack-dev-server --config ./wp.cfg/webpack.config.debug.babel.js --host 0.0.0.0 --port 8009 --progress --colors",
     "dist": "cross-env NODE_ENV=production webpack --config ./wp.cfg/webpack.config.dist.babel.js"
   },
   "author": "yanan",
@@ -13,9 +13,11 @@
   "dependencies": {
     "@babel/runtime": "^7.9.2",
     "@babel/runtime-corejs3": "^7.9.2",
-    "antd": "^3.26.14",
+    "antd": "^4.1.1",
+    "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
+    "oidc-client": "^1.8.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
@@ -31,6 +33,7 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
@@ -41,6 +44,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^7.0.2",
     "css-loader": "^3.4.2",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.0.4",
     "less": "^3.11.1",
@@ -49,6 +53,7 @@
     "node-sass": "^4.13.1",
     "postcss-loader": "^3.0.0",
     "postcss-px-to-viewport": "^1.1.1",
+    "react-hot-loader": "^4.12.20",
     "sass": "^1.26.3",
     "sass-loader": "^8.0.2",
     "sass-resources-loader": "^2.0.1",
@@ -58,5 +63,33 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.8.2",
     "webpack-merge": "^4.2.2"
+  },
+  "standard": {
+    "ignore": [
+      "node_modules/**"
+    ],
+    "globals": [
+      "React",
+      "ReactDOM",
+      "_",
+      "globalConfig",
+      "PropTypes",
+      "chai",
+      "fetch",
+      "sinon",
+      "describe",
+      "it",
+      "import",
+      "fieldConfig",
+      "logoConfig"
+    ],
+    "parser": "babel-eslint",
+    "plugins": [
+      "react-hooks"
+    ],
+    "rules": {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    }
   }
 }

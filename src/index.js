@@ -1,4 +1,5 @@
 import App from 'components/App'
+import { hot } from 'react-hot-loader/root';
 
 const render = (Component) => {
   ReactDOM.render(
@@ -7,3 +8,5 @@ const render = (Component) => {
   )
 }
 render(App)
+
+export default hot(App);

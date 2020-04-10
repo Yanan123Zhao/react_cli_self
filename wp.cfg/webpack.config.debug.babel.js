@@ -10,9 +10,11 @@ const {
   HotModuleReplacementPlugin
 } = webpack
 
-let configPath = path.resolve(__dirname, '../config/debug')
+const configPath = path.resolve(__dirname, '../config/debug')
 
-let target = process.env.NODE_ENV
+const serviceProxyTarget = 'http://192.168.1.180:8083'
+
+const target = process.env.NODE_ENV
 console.log('debug in enviroment ', target)
 
 module.exports = (env) => {
@@ -22,26 +24,26 @@ module.exports = (env) => {
 
   return merge(base, {
     mode: 'development',
-    devtool: /* 'cheap-module-eval-source-map' */ 'eval',
+    devtool: /* 'cheap-module-eval-source-map' */ 'source-map',
     entry: {
-      bundle: [path.resolve(__dirname, '../src/index.js')]
+      bundle: ['react-hot-loader/patch', path.resolve(__dirname, '../src/index.js')]
     },
     output: {
       path: path.resolve(__dirname, '../dev/dist'),
       publicPath: '/anaesthesia/dist/'
     },
     devServer: {
-      // hot: true,
+      hot: true,
       contentBase: path.resolve(__dirname, '../dev'),
       compress: true,
       historyApiFallback: true,
       // proxy https request to http server
       proxy: {
-        // '/authorization/api/web/**': {
-        //   target: serviceProxyTarget,
-        //   secure: false,
-        //   changeOrigin: true
-        // }
+        '/authorization/api/web/**': {
+          target: serviceProxyTarget,
+          secure: false,
+          changeOrigin: true
+        }
       }
     },
     module: {
@@ -51,10 +53,6 @@ module.exports = (env) => {
           exclude: /node_modules/,
           use: [
             {
-              // loader: MiniCssExtractPlugin.loader,
-              // options: {
-              //   publicPath: '/anaesthesia/dist/'
-              // }
               loader: 'style-loader'
             }, {
               loader: 'css-loader',
@@ -71,10 +69,9 @@ module.exports = (env) => {
               options: {
                 sassOptions: {
                   includePaths: [
-                    path.resolve(__dirname, '../src'),
-                    // path.resolve(__dirname, '../libs'),
+                    path.resolve(__dirname, '../src')
                   ]
-                } 
+                }
               }
             }, {
               loader: 'sass-resources-loader',
@@ -97,7 +94,7 @@ module.exports = (env) => {
               loader: 'less-loader',
               options: {
                 modifyVars: antdTheme,
-                javascriptEnabled: true,
+                javascriptEnabled: true
               }
             }
           ]

@@ -3,8 +3,8 @@ const webpack = require('webpack')
 const base = require('./webpack.config.base.babel')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const antdTheme = require('../common/theme/antdTheme')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const {
   LoaderOptionsPlugin,
@@ -12,9 +12,9 @@ const {
   HashedModuleIdsPlugin
 } = webpack
 
-let configPath = path.resolve(__dirname, '../config/debug')
+const configPath = path.resolve(__dirname, '../config/standalone.js')
 
-let target = process.env.NODE_ENV
+const target = process.env.NODE_ENV
 console.log('debug in enviroment ', target)
 
 module.exports = (env) => {
@@ -25,9 +25,11 @@ module.exports = (env) => {
   return merge(base, {
     mode: 'production',
     entry: {
-      bundle: [path.resolve(__dirname, '../src/index.js')]
+      bundle: ['babel-polyfill', path.resolve(__dirname, '../src/index.js')]
     },
     output: {
+      filename: '[name].[chunkhash].js',
+      chunkFilename: '[name].[chunkhash].js',
       path: path.resolve(__dirname, '../dist'),
       publicPath: '/anaesthesia/dist/'
     },
@@ -38,10 +40,7 @@ module.exports = (env) => {
           exclude: /node_modules/,
           use: [
             {
-              loader: MiniCssExtractPlugin.loader,
-              options: {
-                publicPath: '/anaesthesia/dist/'
-              }
+              loader: 'style-loader'
             }, {
               loader: 'css-loader',
               options: {
@@ -57,10 +56,9 @@ module.exports = (env) => {
               options: {
                 sassOptions: {
                   includePaths: [
-                    path.resolve(__dirname, '../src'),
-                    // path.resolve(__dirname, '../libs'),
+                    path.resolve(__dirname, '../src')
                   ]
-                } 
+                }
               }
             }, {
               loader: 'sass-resources-loader',
@@ -83,7 +81,7 @@ module.exports = (env) => {
               loader: 'less-loader',
               options: {
                 modifyVars: antdTheme,
-                javascriptEnabled: true,
+                javascriptEnabled: true
               }
             }
           ]
@@ -91,8 +89,8 @@ module.exports = (env) => {
       ]
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'style.[contenthash].css'
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: ['**/*', '!ico/**']
       }),
       new LoaderOptionsPlugin({
         minimize: true

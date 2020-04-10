@@ -1,4 +1,3 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
@@ -18,10 +17,11 @@ module.exports = {
       name: true,
       cacheGroups: {
         vendors: {
-          test: /[\\/]node_modules[\\/](.*)\.js$/,
-          name: 'verdors',
+          // test: /[\\/]node_modules[\\/](.*)\.js$/,
+          test: /node_modules/,
+          name: 'vendors',
           chunks: 'all'
-        },
+        }
         // default: {
         //   minChunks: 2,
         //   priority: -1,
@@ -38,14 +38,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
+        test: /\.(jsx|js)$/,
+        include: [
+          path.resolve(__dirname, '../src'),
+          path.resolve(__dirname, '../libs'),
+          path.resolve(__dirname, '../config'),
+          /node_modules\/oidc-client\//
+        ],
+        // exclude: /node_modules/,
         use: [{
           loader: 'babel-loader',
-          options: {
+          // options: {
             // presets: [['@babel/preset-env', {modules: false}], 'react'],
             // plugins: ['syntax-dynamic-import', ['import', { libraryName: 'antd', style: true }]]
-          }
+          // }
         }]
       }, {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
